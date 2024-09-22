@@ -1,5 +1,7 @@
 import { createCanvas, loadImage, registerFont } from "canvas";
 import { AttachmentBuilder, TextChannel } from "discord.js";
+import { writeFile } from "fs/promises";
+import { font, welcomeImage } from "./index";
 import { getGuild } from "./utils";
 
 export const sendWelcomeMessage = async (
@@ -9,16 +11,16 @@ export const sendWelcomeMessage = async (
   const canvasWidth = 850;
   const canvasHeight = 478;
   const avatarHeight = 200;
-  registerFont("./fonts/ja-jp.ttf", { family: "ja-jp" });
+  registerFont(font, { family: "ja-jp" });
   const canvas = createCanvas(canvasWidth, canvasHeight);
   const context = canvas.getContext("2d");
-  const backgroundImage = await loadImage("./images/genshinWelcome.jpg");
+  const backgroundImage = await loadImage(welcomeImage);
   context.globalAlpha = 1.0;
   context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
   context.globalAlpha = 0.05;
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, canvas.width, canvas.height);
-  context.globalAlpha = 2.0;
+  context.globalAlpha = 1.0;
   context.font = "64px ja-jp";
   context.textAlign = "center";
   context.textBaseline = "middle";
@@ -48,6 +50,20 @@ export const sendWelcomeMessage = async (
   );
   context.closePath();
   context.clip();
+
+  const guild = getGuild();
+  if (guild == null) {
+    return;
+  }
+  const user = await guild.members.fetch(userId);
+  const avatar = await loadImage(user.displayAvatarURL({ extension: "jpg" }));
+  context.drawImage(
+    avatar,
+    canvas.width / 2 - avatarHeight / 2,
+    canvas.height / 2 - avatarHeight / 2 - 75,
+    avatarHeight,
+    avatarHeight
+  );
 
   try {
     const guild = getGuild();

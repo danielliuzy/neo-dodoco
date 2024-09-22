@@ -1,6 +1,7 @@
 import { ActivityType, ChannelType, Client, Partials } from "discord.js";
 import { config } from "dotenv";
 import { connect as connectMongoose } from "mongoose";
+import { join } from "path";
 import { startBdayJob } from "./bday";
 import { getTextChannel, testDeployment } from "./utils";
 import { sendWelcomeMessage } from "./welcome";
@@ -12,6 +13,10 @@ export const bdayChannelId = process.env.BDAY_CHANNEL_ID;
 export const welcomeChannelId = process.env.WELCOME_CHANNEL_ID;
 export const testChannelId = process.env.TEST_CHANNEL_ID;
 export const testUserId = process.env.TEST_USER_ID;
+
+export const font = join(__dirname, "fonts/ja-jp.ttf");
+export const bdayImage = join(__dirname, "images/paimonBday.jpg");
+export const welcomeImage = join(__dirname, "images/genshinWelcome.jpg");
 
 const mongoSrv = process.env.MONGO_SRV;
 connectMongoose(mongoSrv, {

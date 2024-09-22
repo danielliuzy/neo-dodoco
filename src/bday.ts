@@ -1,7 +1,13 @@
 import { createCanvas, loadImage, registerFont } from "canvas";
 import { CronJob } from "cron";
 import { AttachmentBuilder, EmbedBuilder, TextChannel } from "discord.js";
-import { bdayChannelId, testChannelId, testUserId } from "./index";
+import {
+  bdayChannelId,
+  bdayImage,
+  font,
+  testChannelId,
+  testUserId,
+} from "./index";
 import Bday from "./models/Bday";
 import { getGuild, getTextChannel } from "./utils";
 
@@ -9,10 +15,10 @@ export const sendBdayMessage = async (userId: string, channel: TextChannel) => {
   const canvasWidth = 850;
   const canvasHeight = 510;
   const avatarHeight = 230;
-  registerFont("./fonts/ja-jp.ttf", { family: "ja-jp" });
+  registerFont(font, { family: "ja-jp" });
   const canvas = createCanvas(canvasWidth, canvasHeight);
   const context = canvas.getContext("2d");
-  const backgroundImage = await loadImage("./images/paimonBday.jpg");
+  const backgroundImage = await loadImage(bdayImage);
   context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
   context.font = "72px ja-jp";
   context.textAlign = "center";
